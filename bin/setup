@@ -1,0 +1,30 @@
+#!/bin/bash
+
+activatorV="1.2.2"
+cd ${OPENSHIFT_DATA_DIR}
+curl http://downloads.typesafe.com/typesafe-activator/${activatorV}/typesafe-activator-${activatorV}.zip > activator.zip
+unzip activator.zip
+rm activator.zip
+ln -s ${OPENSHIFT_DATA_DIR}/activator-${activatorV} ${OPENSHIFT_DATA_DIR}/activator
+
+#install scala
+SCALA_VERSION=2.11.7
+curl -fsL http://downloads.typesafe.com/scala/$SCALA_VERSION/scala-$SCALA_VERSION.tgz | tar xfz - -C ~
+export PATH=~/scala-$SCALA_VERSION/bin:$PATH
+scala -version
+
+#install sbt
+SBT_VERSION=0.13.8
+echo "Download sbt $SBT_VERSION"
+curl -s -o  ${OPENSHIFT_DATA_DIR}/sbt.tgz http://scalasbt.artifactoryonline.com/scalasbt/sbt-native-packages/org/scala-sbt/sbt/$SBT_VERSION/sbt.tgz
+tar xzf sbt.tgz
+rm -f xzf sbt.tgz
+export PATH=~/scala-$SCALA_VERSION/bin:$PATH
+sbt --version
+
+#install java8
+cd $OPENSHIFT_DATA_DIR
+wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u5-b13/jdk-8u5-linux-x64.tar.gz
+tar -zxf jdk-8u5-linux-x64.tar.gz
+export PATH=$OPENSHIFT_DATA_DIR/jdk1.8.0_05/bin:$PATH
+export JAVA_HOME="$OPENSHIFT_DATA_DIR/jdk/jdk1.8.0_05"
